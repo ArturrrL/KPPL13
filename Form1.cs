@@ -48,10 +48,7 @@ namespace l13._1
             TVSklad.AfterSelect += TVSklad_AfterSelect;
         }
 
-        // ------------------------------------------------------------
-        //  Helpers для довідників з крапками (типу "Од.виміру")
-        // ------------------------------------------------------------
-
+     
         private static string MakeSafeName(string name)
         {
             return (name ?? "")
@@ -60,7 +57,6 @@ namespace l13._1
                 .Replace("-", "_");
         }
 
-        // Якщо перша колонка має крапку — робимо алиас-колонку без крапки і копіюємо значення
         private string EnsureBindableFirstColumn(DataTable dt)
         {
             string col0 = dt.Columns[0].ColumnName;
@@ -96,10 +92,7 @@ namespace l13._1
             return alias;
         }
 
-        // ------------------------------------------------------------
-        //  Load / Init
-        // ------------------------------------------------------------
-
+  
         private void Form1_Load(object sender, EventArgs e)
         {
             MySklad = new TSklad();
@@ -111,7 +104,7 @@ namespace l13._1
             BuildTree();
             BindGrid();
 
-            ApplyFilterSort(); // щоб одразу виставити сортування/підсумки
+            ApplyFilterSort(); 
             DGSkladSum.DataSource = MySklad.TabSum;
         }
 
@@ -123,7 +116,6 @@ namespace l13._1
             COL_POSTACH = MySklad.DovPostach.Columns[0].ColumnName;
             COL_ODIN = MySklad.DovOdin.Columns[0].ColumnName;
 
-            // “безпечні” поля для DisplayMember/ValueMember
             BIND_GRUPA = EnsureBindableFirstColumn(MySklad.DovGrupa);
             BIND_POSTACH = EnsureBindableFirstColumn(MySklad.DovPostach);
             BIND_ODIN = EnsureBindableFirstColumn(MySklad.DovOdin);
@@ -154,13 +146,10 @@ namespace l13._1
             CBSortField.Items.Add("Вартість");
             CBSortField.SelectedIndex = 0;
 
-            // якщо в тебе кнопки є у формі (імена як у попередніх версіях)
-            // просто переконайся що в Designer прив’язано Click -> ці методи
+
         }
 
-        // ------------------------------------------------------------
-        //  Tree
-        // ------------------------------------------------------------
+
 
         private void BuildTree()
         {
@@ -207,9 +196,6 @@ namespace l13._1
             return t != null ? t.Item1 : null;
         }
 
-        // ------------------------------------------------------------
-        //  Grid
-        // ------------------------------------------------------------
 
         private void BindGrid()
         {
@@ -311,8 +297,7 @@ namespace l13._1
 
         private void DGSklad_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            // Не падаємо, якщо у файлі є значення, яких нема у довіднику
-            // (краще потім додати у довідник або підчистити)
+        
             e.ThrowException = false;
         }
 
@@ -361,9 +346,7 @@ namespace l13._1
             }
         }
 
-        // ------------------------------------------------------------
-        //  Filter / Sort
-        // ------------------------------------------------------------
+        
 
         private void BApplyFS_Click(object sender, EventArgs e)
         {
@@ -466,9 +449,7 @@ namespace l13._1
             ApplyFilterSort();
         }
 
-        // ------------------------------------------------------------
-        //  Menu: File (Зчитати/Записати/Друк/Вихід)
-        // ------------------------------------------------------------
+   
 
         private void miOpen_Click(object sender, EventArgs e)
         {
@@ -479,13 +460,13 @@ namespace l13._1
                 {
                     MySklad.LoadFromFile(ofd.FileName);
 
-                    // Після завантаження — перев’яжемо все що залежить від довідників
+                   
                     InitDirFields();
                     BindTopPanel();
                     BuildTree();
                     BindGrid();
 
-                    // відновимо поточний відбір дерева + фільтр/сорт
+              
                     Tuple<string, string> t = TVSklad.SelectedNode != null ? TVSklad.SelectedNode.Tag as Tuple<string, string> : null;
                     if (t != null) MySklad.ApplyFilter(t.Item1, t.Item2);
 
@@ -525,9 +506,7 @@ namespace l13._1
             Close();
         }
 
-        // ------------------------------------------------------------
-        //  Друк: без заголовків — тільки дані (і в Preview, і в PDF)
-        // ------------------------------------------------------------
+
 
         private void printDocument1_BeginPrint(object sender, PrintEventArgs e)
         {
@@ -594,9 +573,7 @@ namespace l13._1
             }
         }
 
-        // ------------------------------------------------------------
-        //  Dovids / Stats
-        // ------------------------------------------------------------
+  
 
         private void miDovids_Click(object sender, EventArgs e)
         {
@@ -650,3 +627,4 @@ namespace l13._1
         }
     }
 }
+
